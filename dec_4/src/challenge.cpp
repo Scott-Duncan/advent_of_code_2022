@@ -33,9 +33,13 @@ std::vector<int> CleaningPairs::getRows(const std::string &line){
 
 bool CleaningPairs::checkIfRowsMatch(const std::vector<int> &rows){
   // std::cout << "Rows: " << rows.at(0) << "," << rows.at(1) << "," << rows.at(2) << "," << rows.at(3) << std::endl;
-  if (rows.at(0) >= rows.at(2) && rows.at(1) <= rows.at(3)){
+  if (rows.at(0) >= rows.at(2) && rows.at(0) <= rows.at(3)){
     return true; 
-   } else if (rows.at(2) >= rows.at(0) && rows.at(3) <= rows.at(1)){
+   } else if (rows.at(1) >= rows.at(2) && rows.at(1) <= rows.at(3)){
+    return true;
+   } else if (rows.at(2) >= rows.at(0) && rows.at(2) <= rows.at(1)){
+    return true; 
+   } else if (rows.at(3) >= rows.at(0) && rows.at(3) <= rows.at(1)){
     return true;
    } else {
     return false;
