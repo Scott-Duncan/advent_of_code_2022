@@ -15,6 +15,8 @@ public:
 
   int inspectRucksack(const std::string &rucksack_1, const std::string &rucksack_2);
 
+  int inspectElfGroup(const std::vector<std::string> &elfs);
+
 private:
 
   int getItemValue(const char item);
