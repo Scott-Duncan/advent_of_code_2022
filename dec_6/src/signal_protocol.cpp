@@ -40,7 +40,7 @@ int SignalProtocol::getSignalStart(const std::string &line,
 
 int main(int argc, char *argv[]) {
 
-  SignalProtocol signal_protocol{"config/test.txt", 4};
+  SignalProtocol signal_protocol{"config/input.txt", 14};
 
   return 0;
 }
