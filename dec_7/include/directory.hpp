@@ -15,9 +15,11 @@ public:
     directories_[name] = directory;
   }
 
-  size_t getSize();
+  int getSize();
 
-  void setSize(const size_t &size) { size_ += size; }
+  int getTestSize();
+
+  void setSize(const int &size) { size_ += size; }
 
   inline std::string getName() { return name_; }
 
@@ -27,12 +29,15 @@ public:
 
   inline std::shared_ptr<Directory> getParent() { return parent_; }
 
-  size_t size_{0};
+  int size_{0};
+
+  int test_size;
+
 private:
 
   std::string name_;
 
-  Directory* parent_;
+  std::shared_ptr<Directory> parent_;
 
   std::map<std::string, std::shared_ptr<Directory>> directories_;
 };
