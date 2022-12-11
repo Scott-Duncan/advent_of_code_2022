@@ -1,28 +1,27 @@
 #include "../include/screen.hpp"
 #include <iostream>
 
-Screen::Screen (const std::string &input_file){
-  std::ifstream input(input_file); 
+Screen::Screen(const std::string &input_file) {
+  std::ifstream input(input_file);
   std::string line;
   int cycle{0};
 
-  while (getline(input, line)){
-    if(line.empty()){break;} 
-    cycle ++;
-    std::cout << "Cycle : " << cycle << std::endl;
+  std::cout << "#";
+  while (getline(input, line)) {
+    if (line.empty()) {
+      break;
+    }
+    cycle++;
 
     if (line[0] == 'n') {
       checkCycle(cycle);
-      continue; 
+      continue;
     } else {
-      std::cout << "Command: " << line << std::endl;
       checkCycle(cycle);
-      cycle ++;
-      checkCycle(cycle);
-      std::cout << "Cycle : " << cycle << std::endl;
+      cycle++;
       int change = std::stoi(line.substr(5));
-      std::cout << "Change: " << change << std::endl;
       x_ += change;
+      checkCycle(cycle);
     }
   }
 
@@ -30,16 +29,22 @@ Screen::Screen (const std::string &input_file){
 }
 
 void Screen::checkCycle(const int &cycle) {
-    if((cycle +20)% 40 == 0){
-      signal_strength_ += x_*cycle; 
-      std::cout << "X is currently : " << x_ << " cycle is " << cycle <<  std::endl;
-      std::cout << "Signal strength: " << x_*cycle << std::endl;
-    }
+  if (cycle % 40 == 0) {
+    std::cout << std::endl;
+  }
+  if((cycle%40) == x_ - 1){
+    std::cout << "#"; 
+  } else if((cycle%40) == x_){
+    std::cout << "#"; 
+  } else if((cycle%40) == x_ + 1){
+    std::cout << "#"; 
+  } else {
+    std::cout << ".";
 
+  }
 }
- 
-int main (int argc, char *argv[])
-{
-  Screen screen(argv[1]); 
+
+int main(int argc, char *argv[]) {
+  Screen screen(argv[1]);
   return 0;
 }
