@@ -7,12 +7,9 @@
 #include <vector>
 
 void addListItems(const std::string &list,Monkey &monkey){
-  std::cout << "Items : ";
   for (int i =0; i < list.size() ; i +=4){
     monkey.addItem(std::stoi(list.substr(i,2)));
-    std::cout << std::stoi(list.substr(i,2)) << ", ";
   }
-  std::cout << std::endl;
 }
 
 void setModifiers(const std::string mods, Monkey &monkey){
@@ -39,7 +36,6 @@ int getTest(const std::string &test){
   temp >> bin;
   temp >> bin;
   temp >> bin;
-  std::cout << std::stoi(bin) << std::endl;
   return std::stoi(bin);
 
 }
@@ -66,10 +62,9 @@ int main (int argc, char *argv[])
     std::string monkey_name= node.first.as<std::string>();
     int monkey_num = std::stoi(monkey_name.substr(monkey_name.size()-2)); 
     monkies.at(monkey_num) =  parseMonkey(node.second);
-    std::cout << "Monkey " << monkey_num << " size is: " << monkies.at(monkey_num).getQueueSize() << std::endl;
   }
 
-  for (int i =0 ; i < 20; i ++){
+  for (int i =0 ; i < 10000; i ++){
     for(int j = 0; j < monkies.size() ; j ++){
       auto q_size = monkies.at(j).getQueueSize();
       for(int k = 0; k < q_size; k ++){

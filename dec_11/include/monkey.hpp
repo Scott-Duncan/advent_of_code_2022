@@ -40,7 +40,7 @@ public:
   }
 
 private:
-  int carryOutWorry(const int &worry);
+  size_t carryOutWorry(const size_t &worry);
 
   int checkTest(const int &check_item);
 
@@ -56,7 +56,7 @@ private:
 
   int num_of_check_{0};
 
-  std::queue<int> items_;
+  std::queue<size_t> items_;
 };
 
 #endif //! MONKEY_HPP

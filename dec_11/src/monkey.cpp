@@ -17,24 +17,23 @@ ThrownItem Monkey::throwItem() {
   return thrown;
 }
 
-int Monkey::carryOutWorry(const int &worry) {
+size_t Monkey::carryOutWorry(const size_t &worry) {
   num_of_check_++;
-  float stress{0.f};
-  float new_worry;
+  size_t stress{0};
+  size_t new_worry;
+  size_t mod = 13 * 7 * 2 * 17 * 5 * 11 * 3 * 19; 
   if (new_ == 0) {
-    stress = float(worry);
+    stress = worry;
   } else {
-    stress = float(new_);
+    stress = new_;
   }
 
   switch (operation_) {
   case kMultiply: {
-    std::cout << "Worry: " << int(std::floor((stress * worry)/3));
-    return int(std::floor((stress * worry)/3));
+    return (size_t(stress * worry) % mod);
   }
   case kAdd: {
-    std::cout << "Worry: " << int(std::floor((stress + worry)/3));
-    return int(std::floor((stress + worry)/3));
+    return (size_t(stress + worry) % mod);
   }
   }
   return 0;
@@ -42,10 +41,8 @@ int Monkey::carryOutWorry(const int &worry) {
 
 int Monkey::checkTest(const int &check_item) {
   if (check_item % mod_check_ == 0) {
-    std::cout << ". Passed, sending to " << monkey_pass_ << std::endl;
     return monkey_pass_;
   } else {
-    std::cout << ". Failed, sending to " << monkey_fail_ << std::endl;
     return monkey_fail_;
   }
 }
