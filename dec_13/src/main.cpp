@@ -3,108 +3,72 @@
 #include <iostream>
 #include <boost/algorithm/string.hpp>
 
-bool comp(std::string &line, std::string &line2 ){
-  auto depth{0}, depth2{0};
-  auto position{0};
-  auto reshaped{false};
-  boost::erase_all(line, ",");
-  boost::erase_all(line2, ",");
-  
-  for(int i = 0; i < line.size(); i ++) {
-    if (position > line2.size()){
-      break;
-    }
-    if(line[i] == ']'){
-      if(line2[position] == ']'){
-          position++;
-          reshaped = false;
-          continue;
-      } else {
-          position += line2.substr(position).find(']');
-          reshaped = false;
-          continue;
-      }
-    }
-    if(line[i] == '['){
-      depth ++;
-      if(line2[position] == '['){
-        depth2 ++;
-        position ++;
-      } else if ( line2[position] == ']'){
-        return false;
-      } else {
-        reshaped = true;
-        int end = line2.substr(position).find(']');
-        // std::cout << line2 << std::endl;
-        line2 = line2.substr(0,position-1) + "][" + 
-                line2.substr(position,end) + "]" +
-                line2.substr(position+end);
-        // std::cout<< line2 << std::endl;
-        position += 2;
-      }
-      continue;
-    } else{
-      if(line2[position] == '['){
-        return false;
-      }
-      if(line2[position] == ']'){
-        if (reshaped){
-          i += line.substr(i).find(']');
-          position ++;
-          depth --;
-          depth2 --;
-          reshaped = false;
-          continue;
-        } else if(line[i] == ']'){
-          position ++;
-          continue;
-        } else {
-          return false;
-        }
-      }
-      if(i >= line2.size()){
-        // std::cout << "Line 2 is too short" << std::endl;
-        return false;
-      }
-      if(int(line[i] - '0') > int(line2[position] - '0')){
-        // std::cout << "Failed because item " << i << " " << line[i] << " is higher than " << line2[position] << std::endl;
-        return false;
-      }
-    }
-      position ++;
-  }
-
-  return true;
+bool is_number (const char c) {
+  return c >= '0' && c <= '9';
 }
 
-int main (int argc, char *argv[])
-{
-  std::fstream input(argv[1]);
-  std::string line1;
-  std::string line2;
-  auto total{0};
-  auto count{1};
-
-  while (getline(input,line1)){
-    getline(input, line2);
-    if(comp(line1,line2)){
-      total += count;
-      // std::cout << "Success" <<std::endl;
-      // std::cout << count <<std::endl;
-      // std::cout << line1 <<std::endl;
-      // std::cout << line2 <<std::endl;
-    } else {
-      // std::cout << "Failure" <<std::endl;
-      // std::cout << count <<std::endl;
-      // std::cout << line1 <<std::endl;
-      // std::cout << line2 <<std::endl;
+bool compare (const std::string& packet1, const std::string& packet2) {
+  int i1 = 0;
+  int i2 = 0;
+  while (i1 < packet1.size() && i2 < packet2.size()) {
+    if (is_number(packet1[i1]) && is_number(packet2[i2])) {
+      int n1 = 0;
+      while (is_number(packet1[i1])) {
+        n1 = n1 * 10 + (packet1[i1] - '0');
+        i1++;
+      }
+      int n2 = 0;
+      while (is_number(packet2[i2])) {
+        n2 = n2 * 10 + (packet2[i2] - '0');
+        i2++;
+      }
+      if (n1 == n2) {
+        continue;
+      }
+      if (n1 < n2) {
+        return true;
+      }
+      break;
+    } else if (packet1[i1] == packet2[i2]) {
+      i1++;
+      i2++;
+    } else if (packet1[i1] == ']') {
+      return true;
+    } else if (packet2[i2] == ']') {
+      break;
+    } else if (packet1[i1] == '[' || packet1[i1] == ',') {
+      i1++;
+    } else if (packet2[i2] == ',' || packet2[i2] == '[') {
+      i2++;
     }
-    count ++;
-    getline(input,line1);
   }
-  
-  std::cout << "Total : " << total << std::endl;
-  
+  if (i1 == packet1.size()) {
+    return true;
+  }
+  return false;
+}
+
+int main(int argc, char * argv[]) {
+  std::string input;
+  if (argc > 1) {
+    input = argv[1];
+  }
+
+  std::string packet1, packet2;
+  std::fstream file(input);
+
+  int index = 0;
+  int sum = 0;
+
+  while(std::getline(file, packet1)) {
+    if (packet1.empty()) continue;
+    std::getline(file, packet2);
+    index++;
+    if (compare(packet1, packet2)) {
+      sum += index;
+    }
+  }
+
+  std::cout << sum << '\n';
   return 0;
 }
-
