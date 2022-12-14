@@ -60,13 +60,14 @@ int main(int argc, char *argv[]) {
   std::fstream input{argv[1]};
   std::string line;
   std::vector<std::vector<int>> cave;
-  auto cave_width{600};
-  auto cave_depth{12};
+  auto max{0}; 
+
+  auto cave_width{800};
+  auto cave_depth{200};
 
   for (int i = 0; i < cave_depth-1; i++) {
     cave.push_back(std::vector<int>(cave_width, 0));
   }
-  cave.push_back(std::vector<int>(cave_width, 1));
 
   while (getline(input, line)) {
     if (line.empty()) {
@@ -74,6 +75,9 @@ int main(int argc, char *argv[]) {
     }
     auto instructions = getInstructions(line);
     for (int i = 0; i < instructions.size() - 1; i ++) {
+      if( instructions.at(i).at(1) > max){
+        max = instructions[i][1];
+      }
       if (instructions.at(i).at(0) == instructions.at(i + 1).at(0)) {
         auto col = instructions.at(i).at(0);
         auto start{0};
@@ -107,6 +111,11 @@ int main(int argc, char *argv[]) {
     }
   }
 
+  std::cout << "max is : " << max << std::endl;
+
+  cave.resize(max+2);
+  cave.push_back(std::vector<int>(cave_width, 1));
+
 
   // sand time
   auto abbys{false};
@@ -133,14 +142,14 @@ int main(int argc, char *argv[]) {
           sand_col++;
         } else {
             cave.at(i).at(sand_col) = 2;
-            debugPrint(cave);
+            // debugPrint(cave);
             break;
         }
       }
     }
   }
 
-  std::cout << "Sandrops are : " << sand_drops << std::endl;
+  std::cout << "Sandrops are : " << sand_drops -1 << std::endl;
 
   return 0;
 }
